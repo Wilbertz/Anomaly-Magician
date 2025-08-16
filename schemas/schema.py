@@ -24,6 +24,7 @@ def create_sample_data(connection_string=CONNECTION_STRING, rows=10000):
         session.commit()
 
 
+
 if __name__ == "__main__":
     create_sample_database()
     create_sample_data()
