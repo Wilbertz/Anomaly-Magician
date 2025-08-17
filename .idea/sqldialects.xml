@@ -3,6 +3,7 @@
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/sql/checking-against-buffer-pool.sql" dialect="TSQL" />
     <file url="file://$PROJECT_DIR$/sql/common-length.sql" dialect="TSQL" />
+    <file url="file://$PROJECT_DIR$/sql/dropcleanbuffers.sql" dialect="TSQL" />
     <file url="file://$PROJECT_DIR$/sql/statistics.sql" dialect="TSQL" />
   </component>
 </project>
