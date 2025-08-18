@@ -17,5 +17,5 @@ def test_config_singleton():
     assert config1 == config2
 
 def test_config_configuration():
-    config = Config()
-    assert not config._server == None
+    assert Config().server
+    assert Config().server == "DESKTOP-2LMIUA2"

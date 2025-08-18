@@ -13,10 +13,6 @@ class Config:
     """
     _instance = None
     _config: dict = None
-    _server: str = None
-    _database: str = None
-    _table: str = None
-    _column: str = None
 
     def __new__(cls, *args, **kwargs):
         if not cls._instance:
@@ -26,10 +22,10 @@ class Config:
     def __init__(self) -> None:
         try:
             self._config = _read_config()
-            self._server = self._config["database"]["server"]
-            print(self._server)
+            self.server = self._config["database"]["server"]
+            self.database = self._config["database"]["database"]
+            self.table = self._config["database"]["table"]
+            self.column = self._config["database"]["column"]
         except FileNotFoundError:
-            raise FileNotFoundError()
-
-
+            raise
 
