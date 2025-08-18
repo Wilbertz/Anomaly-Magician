@@ -1,12 +1,6 @@
 import json
 
 
-def _read_config() -> dict:
-    with open(".\configuration\config.json") as f:
-        _config = json.load(f)
-    return _config
-
-
 class Config:
     """
     This class (implemented as a singleton) implements access to application configuration.
@@ -21,11 +15,17 @@ class Config:
 
     def __init__(self) -> None:
         try:
-            self._config = _read_config()
+            self._config = self._read_config()
             self.server = self._config["database"]["server"]
             self.database = self._config["database"]["database"]
             self.table = self._config["database"]["table"]
             self.column = self._config["database"]["column"]
         except FileNotFoundError:
             raise
+
+    @staticmethod
+    def _read_config() -> dict:
+        with open(".\configuration\config.json") as f:
+            _config = json.load(f)
+        return _config
 
