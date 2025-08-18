@@ -19,3 +19,6 @@ def test_config_singleton():
 def test_config_configuration():
     assert Config().server
     assert Config().server == "DESKTOP-2LMIUA2"
+    assert Config().database == "Anomaly-Magician"
+    assert Config().table == "samplecodestable"
+    assert Config().column == "value"
