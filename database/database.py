@@ -1,3 +1,7 @@
+from contextlib import closing
+
+import sqlalchemy
+from sqlalchemy import create_engine
 from configuration.config import Config
 
 
@@ -13,6 +17,7 @@ class Database:
         return cls._instance
 
     def __init__(self):
+        self.engine = self._get_engine()
         pass
 
     @staticmethod
@@ -24,3 +29,21 @@ class Database:
         )
         return connection_string
 
+    def _get_engine(self) -> sqlalchemy.engine.Engine:
+        connection_string = self._get_connection_string()
+        engine = create_engine(connection_string, echo=False)
+        return engine
+
+    def get_statistics(self):
+        with closing(self.engine.raw_connection()) as connection:
+            cursor = connection.cursor()
+            cursor.execute("DBCC SHOW_STATISTICS ('samplecodestable', 'value')")
+            rows1 = cursor.fetchall()
+            print(rows1)
+            cursor.nextset()
+            rows2 = cursor.fetchall()
+            print(rows2)
+            print(f"Average length: {rows2[0][1]}")
+            cursor.nextset()
+            rows3 = cursor.fetchall()
+            print(rows3)
