@@ -2,4 +2,6 @@ from pydantic import BaseModel
 
 
 class CodeModel(BaseModel):
-    pass
+    name: str
+    industry: str | None
+    iso_code: Bool
