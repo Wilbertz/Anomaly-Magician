@@ -33,3 +33,9 @@ class CodeModel(BaseModel):
         A quick and fast way to create syntactically correct sample codes.
         """
         pass
+
+    def _create_sample_codes_from_values(self, count: PositiveInt) -> list[str]:
+        pass
+
+    def _create_sample_codes_from_regex(self, count: PositiveInt) -> list[str]:
+        pass
