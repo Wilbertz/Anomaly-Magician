@@ -1,4 +1,5 @@
-from pydantic import BaseModel
+from typing import List
+from pydantic import BaseModel, Field
 from pydantic.v1 import PositiveInt
 
 
@@ -6,10 +7,12 @@ class CodeModel(BaseModel):
     """
     The base class for all code models.
     """
-    name: str
-    industry: str | None
-    iso_code: bool
-    min_length: int
+    name: str = Field(..., title="Name",
+                       description="The human readable name of the code",
+                       examples=["ICD-10", "VIN", "IBAN"])
+    industries: List[str] | None
+    iso_code: bool = Field(..., title="ISO Code", description="A flag indicating whether the code is defined by the ISO.")
+    min_length: int 
     max_length: int
     fixed_length: int | None
     regex: str | None
@@ -20,6 +23,7 @@ class CodeModel(BaseModel):
         A quick and fast way to check if the code is syntactically correct.
         No check is attempted to check whether an instance of the object
         identified by this code really exists.
+        :return: A boolean indicating whether the code is syntactically correct.
         """
         pass
 
@@ -28,12 +32,15 @@ class CodeModel(BaseModel):
         A time-consuming and potentially expansive way to check both whether
         the code is syntactically correct and whether an instance of the object
         really exists in the real world. Typically, an external service is called.
+        :return: A boolean indicating whether the code is syntactically correct.
         """
         pass
 
     def create_sample_codes(self, count: PositiveInt) -> list[str]:
         """
         A quick and fast way to create syntactically correct sample codes.
+        :param count: The number of codes to create.
+        :return: The list of sample codes.
         """
         pass
 
