@@ -1,6 +1,8 @@
 import random
-from typing import List
+import re
+
 import exrex
+from typing import List
 from pydantic import BaseModel, Field
 from pydantic.v1 import PositiveInt
 
@@ -9,25 +11,25 @@ class CodeModel(BaseModel):
     """
     The base class for all code models.
     """
-    name: str = Field(..., title="Name",
+    name: str = Field(title="Name",
                        description="The human readable name of the code",
                        examples=["ICD-10", "VIN", "IBAN"])
-    industries: List[str] | None = Field(..., title="Industries",
+    industries: List[str] | None = Field(default = None, title="Industries",
                             description="The industries where this code is used.")
-    iso_code: bool = Field(..., title="ISO Code",
-                           description="A flag indicating whether the code is defined by the ISO.")
-    min_length: int = Field(..., title="Minimum Length",
-                            description="The minimum number of characters a code must have.")
-    max_length: int = Field(..., title="Maximum Length",
-                            description="The maximum number of characters a code can have.")
-    fixed_length: int | None = Field(..., title="Fixed Length",
+    iso_code: str | None = Field(default=None, title="ISO Code",
+                           description="The name of the ISO standard in case an ISO code is used.")
+    fixed_length: int | None = Field(default=None, title="Fixed Length",
                                      description="The fixed number of characters all code instances must have.")
-    regex: str | None = Field(..., title="Regular Expression",
+    min_length: int = Field(default_factory=lambda data: data['fixed_length'], title="Minimum Length",
+                            description="The minimum number of characters a code must have.")
+    max_length: int = Field(default_factory=lambda data: data['fixed_length'], title="Maximum Length",
+                            description="The maximum number of characters a code can have.")
+    regex: re.Pattern | None = Field(default=None, title="Regular Expression",
                                      description="A regular expression used to validate the code.")
-    values: list[str] | None = Field(..., title="Value list",
+    values: list[str] | None = Field(default=None, title="Value list",
                                      description="A complete list of possible values.")
 
-    def simple_check(self)  -> bool:
+    def simple_check(self, code: str)  -> bool:
         """
         A quick and fast way to check if the code is syntactically correct.
         No check is attempted to check whether an instance of the object
@@ -36,7 +38,7 @@ class CodeModel(BaseModel):
         """
         pass
 
-    def complex_check(self) -> bool:
+    def complex_check(self, code: str) -> bool:
         """
         A time-consuming and potentially expansive way to check both whether
         the code is syntactically correct and whether an instance of the object
