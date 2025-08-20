@@ -11,10 +11,14 @@ class CodeModel(BaseModel):
                        description="The human readable name of the code",
                        examples=["ICD-10", "VIN", "IBAN"])
     industries: List[str] | None
-    iso_code: bool = Field(..., title="ISO Code", description="A flag indicating whether the code is defined by the ISO.")
-    min_length: int 
-    max_length: int
-    fixed_length: int | None
+    iso_code: bool = Field(..., title="ISO Code",
+                           description="A flag indicating whether the code is defined by the ISO.")
+    min_length: int = Field(..., title="Minimum Length",
+                            description="The minimum number of characters a code must have.")
+    max_length: int = Field(..., title="Maximum Length",
+                            description="The maximum number of characters a code can have.")
+    fixed_length: int | None = Field(..., title="Fixed Length",
+                                     description="The fixed number of characters all code instances must have.")
     regex: str | None
     values: list[str] | None
 
