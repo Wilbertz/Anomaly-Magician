@@ -1,4 +1,6 @@
+import random
 from typing import List
+import exrex
 from pydantic import BaseModel, Field
 from pydantic.v1 import PositiveInt
 
@@ -58,7 +60,10 @@ class CodeModel(BaseModel):
         :param count: The number of codes to create.
         :return: The list of sample codes.
         """
-        pass
+        if self.values is None or len(self.values) == 0:
+            raise ValueError("Must specify a value list.")
+        else:
+            return random.choices(self.values, k=count)
 
     def _create_sample_codes_from_regex(self, count: PositiveInt) -> list[str]:
         """
@@ -70,4 +75,4 @@ class CodeModel(BaseModel):
         if self.regex is None:
             raise ValueError("Must specify a regular expression.")
         else:
-            pass
+            return [exrex.getone(self.regex) for _ in range(count)]
