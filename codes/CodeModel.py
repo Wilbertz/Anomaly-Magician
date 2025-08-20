@@ -67,4 +67,7 @@ class CodeModel(BaseModel):
         :param count: The number of codes to create.
         :return: The list of sample codes.
         """
-        pass
+        if self.regex is None:
+            raise ValueError("Must specify a regular expression.")
+        else:
+            pass
