@@ -10,7 +10,8 @@ class CodeModel(BaseModel):
     name: str = Field(..., title="Name",
                        description="The human readable name of the code",
                        examples=["ICD-10", "VIN", "IBAN"])
-    industries: List[str] | None
+    industries: List[str] | None = Field(..., title="Industries",
+                            description="The industries where this code is used.")
     iso_code: bool = Field(..., title="ISO Code",
                            description="A flag indicating whether the code is defined by the ISO.")
     min_length: int = Field(..., title="Minimum Length",
@@ -19,8 +20,10 @@ class CodeModel(BaseModel):
                             description="The maximum number of characters a code can have.")
     fixed_length: int | None = Field(..., title="Fixed Length",
                                      description="The fixed number of characters all code instances must have.")
-    regex: str | None
-    values: list[str] | None
+    regex: str | None = Field(..., title="Regular Expression",
+                                     description="A regular expression used to validate the code.")
+    values: list[str] | None = Field(..., title="Value list",
+                                     description="A complete list of possible values.")
 
     def simple_check(self)  -> bool:
         """
