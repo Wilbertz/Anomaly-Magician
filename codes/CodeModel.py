@@ -3,6 +3,9 @@ from pydantic.v1 import PositiveInt
 
 
 class CodeModel(BaseModel):
+    """
+    The base class for all code models.
+    """
     name: str
     industry: str | None
     iso_code: bool
@@ -35,7 +38,19 @@ class CodeModel(BaseModel):
         pass
 
     def _create_sample_codes_from_values(self, count: PositiveInt) -> list[str]:
+        """
+        A quick and fast way to create syntactically correct sample codes based
+        on the value list.
+        :param count: The number of codes to create.
+        :return: The list of sample codes.
+        """
         pass
 
     def _create_sample_codes_from_regex(self, count: PositiveInt) -> list[str]:
+        """
+        A quick and fast way to create syntactically correct sample codes based
+        on the regular expression.
+        :param count: The number of codes to create.
+        :return: The list of sample codes.
+        """
         pass
