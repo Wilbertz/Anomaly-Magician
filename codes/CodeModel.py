@@ -76,3 +76,4 @@ class CodeModel(BaseModel):
             raise ValueError("Must specify a regular expression.")
         else:
             return [exrex.getone(self.regex) for _ in range(count)]
+
