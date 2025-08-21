@@ -30,11 +30,12 @@ class VinCode(CodeModel):
     def simple_check(self, code: str) -> bool:
         if not self.regex.match(code):
             return False
+
         return code[8] == self._compute_check_digits(code)
 
     def create_sample_codes(self, count: PositiveInt) -> list[str]:
         return [
-            s[:8] + self._compute_check_digits(s[8]) + s[9:]
+            s[:8] + self._compute_check_digits(s) + s[9:]
             for s in super()._create_sample_codes_from_regex(count)
         ]
 
@@ -42,8 +43,12 @@ class VinCode(CodeModel):
         """
         Compute the check digit for a VIN (9th character).
         """
+        print(code)
+        #code = "7EBW01KS88K02CZ7S"
+        blubber = self.regex.match(code)
+        print(f"Regex: {blubber}")
         if not self.regex.match(code):
-            raise ValueError("Invalid VIN format")
+            raise ValueError(f"Invalid VIN format: {code}, Regex pattern: {self.regex.pattern}")
 
         total = 0
         for i, char in enumerate(code):
