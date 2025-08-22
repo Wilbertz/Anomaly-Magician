@@ -25,7 +25,7 @@ class Config:
 
     @staticmethod
     def _read_config() -> dict:
-        with open(".\configuration\config.json") as f:
+        with open(".\\configuration\\config.json") as f:
             _config = json.load(f)
         return _config
 
