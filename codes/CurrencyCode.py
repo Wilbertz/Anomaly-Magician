@@ -35,3 +35,9 @@ class CurrencyCode(CodeModel):
                        'XBA', 'XBB', 'XBC', 'XBD', 'XCD', 'XCG', 'XDR', 'XOF', 'XPD', 'XPF',
                        'XPT', 'XSU', 'XTS', 'XUA', 'XXX', 'YER', 'ZAR', 'ZMW', 'ZWG']
 
+    def simple_check(self, code: str) -> bool:
+        return code in self.values
+
+    def create_sample_codes(self, count: PositiveInt) -> list[str]:
+        return super()._create_sample_codes_from_values(count)
+
