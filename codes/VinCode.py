@@ -34,9 +34,10 @@ class VinCode(CodeModel):
         return code[8] == self._compute_check_digits(code)
 
     def create_sample_codes(self, count: PositiveInt) -> list[str]:
+        sample_codes = super()._create_sample_codes_from_regex(count)
         return [
             s[:8] + self._compute_check_digits(s) + s[9:]
-            for s in super()._create_sample_codes_from_regex(count)
+            for s in sample_codes
         ]
 
     def _compute_check_digits(self, code: str) -> str:

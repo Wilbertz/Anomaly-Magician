@@ -19,13 +19,23 @@ def test_create_instance():
 
 def test_simple_check():
     vin_code = VinCode()
-    result = vin_code.simple_check("YV1MS382262161511")
+    result =  vin_code.simple_check("V58XFC7M8L7PVBND5")
     assert result
 
 def test_create_sample_codes():
-    count = 1
     vin_code = VinCode()
-    sample_codes = vin_code.create_sample_codes(count)
-    print (sample_codes)
-    assert len(sample_codes) == count
+    sample_codes = vin_code.create_sample_codes(10)
+    assert len(sample_codes) == 10
+
+def test_create_sample_codes_from_regex():
+    vin_code = VinCode()
+    sample_codes = vin_code._create_sample_codes_from_regex(10)
+    assert sample_codes
+    assert len(sample_codes) == 10
+
+def test_compute_check_digits():
+    vin_code = VinCode()
+    result = vin_code._compute_check_digits("VL1UA89ZC6UMSKDN6")
+    assert result
+    assert result == '6'
 
