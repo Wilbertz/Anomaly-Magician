@@ -43,10 +43,6 @@ class VinCode(CodeModel):
         """
         Compute the check digit for a VIN (9th character).
         """
-        print(code)
-        #code = "7EBW01KS88K02CZ7S"
-        blubber = self.regex.match(code)
-        print(f"Regex: {blubber}")
         if not self.regex.match(code):
             raise ValueError(f"Invalid VIN format: {code}, Regex pattern: {self.regex.pattern}")
 
