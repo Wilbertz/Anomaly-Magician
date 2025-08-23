@@ -24,10 +24,10 @@ class Icd10Code(CodeModel):
         self.regex = re.compile(r"^[A-Z][0-9]{2}(?:\.[A-Z0-9]{1,4})?$")
 
     def simple_check(self, code: str) -> bool:
-        pass
+        return bool(self.regex.match(code))
 
     def complex_check(self, code: str) -> bool:
-        pass
+        raise NotImplementedError()
 
     def create_sample_codes(self, count: PositiveInt) -> list[str]:
-        pass
+        return super()._create_sample_codes_from_regex(count)
