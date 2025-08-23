@@ -1,6 +1,6 @@
 import re
-from dataclasses import Field
-from typing import List
+
+from pydantic.v1 import PositiveInt
 
 from codes.CodeModel import CodeModel
 
@@ -19,6 +19,15 @@ class Icd10Code(CodeModel):
         self.industries = ["Healthcare"]
         self.iso_code = None
         self.fixed_length = None
-        self.minor_length = 3
+        self.min_length = 3
         self.max_length = 7 # WHO-ICD-10 has a maximum of 6 characters.
         self.regex = re.compile(r"^[A-Z][0-9]{2}(?:\.[A-Z0-9]{1,4})?$")
+
+    def simple_check(self, code: str) -> bool:
+        pass
+
+    def complex_check(self, code: str) -> bool:
+        pass
+
+    def create_sample_codes(self, count: PositiveInt) -> list[str]:
+        pass

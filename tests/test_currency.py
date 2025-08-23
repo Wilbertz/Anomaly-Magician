@@ -14,7 +14,7 @@ def test_create_instance():
     assert currency_code.min_length == 3
     assert currency_code.max_length == 3
     assert currency_code.regex is None
-    assert len(currency_code.values) > 0
+    assert len(currency_code.values) == 179
 
 def test_simple_check():
     currency_code = CurrencyCode()
