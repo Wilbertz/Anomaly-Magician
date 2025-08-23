@@ -12,8 +12,13 @@ class Icd10Code(CodeModel):
     It contains codes for diseases, signs and symptoms, abnormal findings, complaints,
     social circumstances, and external causes of injury or diseases.
     """
-    name: str = Field(default="Currency")
-    industries: List[str] = Field(default=["Healthcare"])
-    iso_code: str | None = Field(default=None)
-    fixed_length: int = Field(default=3)
-    regex: re.Pattern = Field(default=re.compile(r"^[A-Z][0-9]{2}(?:\.[A-Z0-9]{1,4})?$"))
+
+    def __init__(self):
+        super().__init__()
+        self.name = "ICD-10"
+        self.industries = ["Healthcare"]
+        self.iso_code = None
+        self.fixed_length = None
+        self.minor_length = 3
+        self.max_length = 7 # WHO-ICD-10 has a maximum of 6 characters.
+        self.regex = re.compile(r"^[A-Z][0-9]{2}(?:\.[A-Z0-9]{1,4})?$")
