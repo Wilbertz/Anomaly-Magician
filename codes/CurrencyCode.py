@@ -1,6 +1,4 @@
 from codes.CodeModel import CodeModel
-from typing import List
-from pydantic import Field
 from pydantic.v1 import PositiveInt
 
 class CurrencyCode(CodeModel):

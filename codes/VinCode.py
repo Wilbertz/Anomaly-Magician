@@ -1,6 +1,4 @@
 import re
-from typing import List
-from pydantic import Field
 from pydantic.v1 import PositiveInt
 from codes.CodeModel import CodeModel
 
