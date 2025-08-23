@@ -9,13 +9,15 @@ class CurrencyCode(CodeModel):
     that defines alpha codes and numeric codes for the representation of currencies and provides
     information about the relationships between individual currencies and their minor units.
     """
-    name: str = Field(default="Currency")
-    industries: List[str] = Field(default=["Finance"])
-    iso_code: str = Field(default="ISO-4217")
-    fixed_length: int = Field(default=3)
 
     def __init__(self):
         super().__init__()
+        self.name = "Currency"
+        self.industries = ["Finance"]
+        self.iso_code = "ISO-4217"
+        self.fixed_length = 3
+        self.min_length = 3
+        self.max_length = 3
         self.values = ['AED', 'AFN', 'ALL', 'AMD', 'AOA', 'ARS', 'AUD', 'AWG', 'AZN', 'BAM',
                        'BBD', 'BDT', 'BGN', 'BHD', 'BIF', 'BMD', 'BND', 'BOB', 'BOV', 'BRL',
                        'BSD', 'BTN', 'BWP', 'BYN', 'BZD', 'CAD', 'CDF', 'CHE', 'CHF', 'CHW',
