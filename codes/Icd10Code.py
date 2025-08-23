@@ -1,3 +1,7 @@
+import re
+from dataclasses import Field
+from typing import List
+
 from codes.CodeModel import CodeModel
 
 
@@ -8,4 +12,8 @@ class Icd10Code(CodeModel):
     It contains codes for diseases, signs and symptoms, abnormal findings, complaints,
     social circumstances, and external causes of injury or diseases.
     """
-    pass
+    name: str = Field(default="Currency")
+    industries: List[str] = Field(default=["Healthcare"])
+    iso_code: str | None = Field(default=None)
+    fixed_length: int = Field(default=3)
+    regex: re.Pattern = Field(default=re.compile(r"^[A-Z][0-9]{2}(?:\.[A-Z0-9]{1,4})?$"))

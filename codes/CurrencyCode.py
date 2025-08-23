@@ -11,7 +11,7 @@ class CurrencyCode(CodeModel):
     """
     name: str = Field(default="Currency")
     industries: List[str] = Field(default=["Finance"])
-    iso_code: bool = Field(default="ISO-4217")
+    iso_code: str = Field(default="ISO-4217")
     fixed_length: int = Field(default=3)
 
     def __init__(self):

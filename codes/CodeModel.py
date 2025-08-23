@@ -10,7 +10,7 @@ class CodeModel(BaseModel):
     """
     The base class for all code models.
     """
-    name: str = Field(title="Name",
+    name: str = Field(default=None, title="Name",
                        description="The human readable name of the code",
                        examples=["ICD-10", "VIN", "IBAN"])
     industries: List[str] | None = Field(default = None, title="Industries",

@@ -21,11 +21,16 @@ class VinCode(CodeModel):
 
     https://vpic.nhtsa.dot.gov/api/
     """
-    name: str = Field(default="VIN")
-    industries: List[str] = Field(default=["Manufacturing"])
-    iso_code: bool = Field(default="ISO-3779")
-    fixed_length: int = Field(default=17)
-    regex: re.Pattern = Field(default=re.compile(r"^[A-HJ-NPR-Z0-9]{17}$"))
+
+    def __init__(self):
+        super().__init__()
+        self.name = "VIN"
+        self.industries = ["Manufacturing"]
+        self.iso_code = "ISO-3779"
+        self.fixed_length = 17
+        self.min_length = 17
+        self.max_length = 17
+        self.regex = re.compile(r"^[A-HJ-NPR-Z0-9]{17}$")
 
     def simple_check(self, code: str) -> bool:
         if not self.regex.match(code):
