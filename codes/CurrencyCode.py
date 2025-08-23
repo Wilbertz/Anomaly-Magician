@@ -38,6 +38,9 @@ class CurrencyCode(CodeModel):
     def simple_check(self, code: str) -> bool:
         return code in self.values
 
+    def complex_check(self, code: str) -> bool:
+        return self.simple_check(code)
+
     def create_sample_codes(self, count: PositiveInt) -> list[str]:
         return super()._create_sample_codes_from_values(count)
 

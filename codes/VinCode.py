@@ -36,6 +36,9 @@ class VinCode(CodeModel):
 
         return code[8] == self._compute_check_digits(code)
 
+    def complex_check(self, code: str) -> bool:
+        raise NotImplementedError()
+
     def create_sample_codes(self, count: PositiveInt) -> list[str]:
         sample_codes = super()._create_sample_codes_from_regex(count)
         return [

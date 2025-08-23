@@ -1,12 +1,13 @@
 import random
 import re
 import exrex
+from abc import ABC, abstractmethod
 from typing import List
 from pydantic import BaseModel, Field
 from pydantic.v1 import PositiveInt
 
 
-class CodeModel(BaseModel):
+class CodeModel(BaseModel, ABC):
     """
     The base class for all code models.
     """
@@ -28,6 +29,7 @@ class CodeModel(BaseModel):
     values: list[str] | None = Field(default=None, title="Value list",
                                      description="A complete list of possible values.")
 
+    @abstractmethod
     def simple_check(self, code: str)  -> bool:
         """
         A quick and fast way to check if the code is syntactically correct.
@@ -37,6 +39,7 @@ class CodeModel(BaseModel):
         """
         pass
 
+    @abstractmethod
     def complex_check(self, code: str) -> bool:
         """
         A time-consuming and potentially expansive way to check both whether
@@ -46,6 +49,7 @@ class CodeModel(BaseModel):
         """
         pass
 
+    @abstractmethod
     def create_sample_codes(self, count: PositiveInt) -> list[str]:
         """
         A quick and fast way to create syntactically correct sample codes.
