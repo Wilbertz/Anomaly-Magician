@@ -29,8 +29,12 @@ def test_get_engine():
     engine = database._get_engine()
     assert engine
 
+def test_get_all_columns():
+    database = Database()
+    all_columns = database.get_all_columns()
+    assert len(all_columns) == 0
+
 def test_get_average_column_length():
     database = Database()
     average_column_length = database.get_average_column_length(Config().table, Config().column)
-    print(average_column_length)
     assert average_column_length > 0
