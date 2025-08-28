@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 
 from configuration.config import Config
-from database.database import Database
+from database.database import Database, DatabaseColumn, FixedLengthDatabaseColumn
 
 
 @pytest.fixture(autouse=True)
@@ -35,7 +35,32 @@ def test_get_all_columns():
     print (all_columns)
     assert len(all_columns) == 2
 
+def test_get_all_text_columns():
+    database = Database()
+    all_columns = database.get_all_text_columns()
+    print (all_columns)
+    assert len(all_columns) == 1
+
+def test_is_fixed_length_column():
+    database = Database()
+    database_column = DatabaseColumn(Config().table, Config().column)
+    is_fixed_length = database.is_fixed_length_column(database_column)
+    assert is_fixed_length is None
+
+def test_is_fixed_length_column_with_tolerance():
+    database = Database()
+    database_column = DatabaseColumn(Config().table, Config().column)
+    is_fixed_length = database.is_fixed_length_column(database_column, tolerance=0.1)
+    assert is_fixed_length == 5
+
+def test_get_all_fixed_length_columns():
+    database = Database()
+    columns = database_columns = database.get_all_fixed_length_columns(tolerance=1.0)
+    print (type(columns[0]))
+    print (len(columns))
+
 def test_get_average_column_length():
     database = Database()
-    average_column_length = database.get_average_column_length(Config().table, Config().column)
+    database_column = DatabaseColumn(Config().table, Config().column)
+    average_column_length = database.get_average_column_length(database_column)
     assert average_column_length > 0
