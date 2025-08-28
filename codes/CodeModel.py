@@ -1,6 +1,8 @@
-import random
 import re
+import gc
+import inspect
 import exrex
+import random
 from abc import ABC, abstractmethod
 from typing import List
 from pydantic import BaseModel, Field
@@ -28,16 +30,14 @@ class CodeModel(BaseModel, ABC):
                                      description="A regular expression used to validate the code.")
     values: list[str] | None = Field(default=None, title="Value list",
                                      description="A complete list of possible values.")
-
-    @abstractmethod
-    def simple_check(self, code: str)  -> bool:
+    @classmethod
+    def simple_check(cls, code: str)  -> bool:
         """
         A quick and fast way to check if the code is syntactically correct.
         No check is attempted to check whether an instance of the object
         identified by this code really exists.
         :return: A boolean indicating whether the code is syntactically correct.
         """
-        pass
 
     @abstractmethod
     def complex_check(self, code: str) -> bool:
@@ -47,7 +47,6 @@ class CodeModel(BaseModel, ABC):
         really exists in the real world. Typically, an external service is called.
         :return: A boolean indicating whether the code is syntactically correct.
         """
-        pass
 
     @abstractmethod
     def create_sample_codes(self, count: PositiveInt) -> list[str]:
@@ -56,7 +55,18 @@ class CodeModel(BaseModel, ABC):
         :param count: The number of codes to create.
         :return: The list of sample codes.
         """
-        pass
+
+    @classmethod
+    def get_all_code_classes(cls) -> list[type]:
+        """
+        A method to get all code classes (Classes derived from CodeModel).
+        :return:
+        """
+        results = []
+        for obj in gc.get_objects():
+            if inspect.isclass(obj) and issubclass(obj, cls) and obj is not cls:
+                results.append(obj)
+        return results
 
     def _create_sample_codes_from_values(self, count: PositiveInt) -> list[str]:
         """

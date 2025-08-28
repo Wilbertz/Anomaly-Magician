@@ -30,6 +30,7 @@ class VinCode(CodeModel):
         self.max_length = 17
         self.regex = re.compile(r"^[A-HJ-NPR-Z0-9]{17}$")
 
+    @classmethod
     def simple_check(self, code: str) -> bool:
         if not self.regex.match(code):
             return False
