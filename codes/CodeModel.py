@@ -30,8 +30,8 @@ class CodeModel(BaseModel, ABC):
                                      description="A regular expression used to validate the code.")
     values: list[str] | None = Field(default=None, title="Value list",
                                      description="A complete list of possible values.")
-    @classmethod
-    def simple_check(cls, code: str)  -> bool:
+    @abstractmethod
+    def simple_check(self, code: str)  -> bool:
         """
         A quick and fast way to check if the code is syntactically correct.
         No check is attempted to check whether an instance of the object
