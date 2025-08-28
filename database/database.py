@@ -20,7 +20,7 @@ class DatabaseColumn:
 @dataclass(frozen=True)
 class FixedLengthDatabaseColumn(DatabaseColumn):
     """This class represents a fixed length database column."""
-    fixed_length: PositiveInt
+    fixed_length: PositiveInt | None = None
 
 class Database:
     """
@@ -102,9 +102,9 @@ class Database:
 
     def get_all_fixed_length_columns(self, tolerance: float = 0) -> List[FixedLengthDatabaseColumn]:
         """ Get all text columns with a fixed length."""
-        text_columns = self.get_all_text_columns()
-        return [FixedLengthDatabaseColumn(
+        text_columns = [FixedLengthDatabaseColumn(
             table=column.table,
             column_name=column.column_name,
             fixed_length=self.is_fixed_length_column(column, tolerance))
-            for column in text_columns]
+            for column in self.get_all_text_columns()]
+        return [column for column in text_columns if column.fixed_length]

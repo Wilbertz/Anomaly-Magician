@@ -55,9 +55,14 @@ def test_is_fixed_length_column_with_tolerance():
 
 def test_get_all_fixed_length_columns():
     database = Database()
+    columns = database.get_all_fixed_length_columns()
+    assert len(columns) == 0
+
+def test_get_all_fixed_length_columns_with_tolerance():
+    database = Database()
     columns = database.get_all_fixed_length_columns(tolerance=1.0)
-    print (type(columns[0]))
-    print (len(columns))
+    print (columns[0])
+    assert len(columns) == 1
 
 def test_get_average_column_length():
     database = Database()
@@ -65,6 +70,3 @@ def test_get_average_column_length():
     average_column_length = database.get_average_column_length(database_column)
     assert average_column_length > 0
 
-def test_blubber():
-    schnulli = FixedLengthDatabaseColumn(Config().table, Config().column, 5)
-    print (schnulli)
