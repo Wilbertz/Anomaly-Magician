@@ -1,7 +1,10 @@
+from collections import namedtuple
 from contextlib import closing
+from tkinter.font import names
 from typing import NamedTuple, List
 import sqlalchemy
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
+from sqlalchemy.orm import sessionmaker
 from sqlmodel import Session
 
 from configuration.config import Config
@@ -45,8 +48,20 @@ class Database:
 
     def get_all_columns(self) -> List[DatabaseColumn]:
         """Get all table name column name pairs in the database"""
-        with Session(self.engine) as session:
-            return []
+        sql = """
+        SELECT 
+            s.name AS SchemaName,
+            t.name AS TableName,
+            c.name AS ColumnName,
+            ty.name AS DataType
+        FROM sys.columns c
+        JOIN sys.tables t ON c.object_id = t.object_id
+        JOIN sys.schemas s ON t.schema_id = s.schema_id
+        JOIN sys.types ty ON c.user_type_id = ty.user_type_id
+        """
+        with sessionmaker(bind=self.engine)() as session:
+            rows = session.execute(text(sql)).fetchall()
+            return [DatabaseColumn(row[1], row[2]) for row in rows]
 
     def get_all_text_columns(self) -> List[DatabaseColumn]:
         """Get all table name text column name pairs in the database"""

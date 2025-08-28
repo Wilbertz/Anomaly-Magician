@@ -32,7 +32,8 @@ def test_get_engine():
 def test_get_all_columns():
     database = Database()
     all_columns = database.get_all_columns()
-    assert len(all_columns) == 0
+    print (all_columns)
+    assert len(all_columns) == 2
 
 def test_get_average_column_length():
     database = Database()
