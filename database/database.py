@@ -7,22 +7,20 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 
 from configuration.config import Config
+from dataclasses import dataclass
 
-
-class DatabaseColumn(NamedTuple):
+@dataclass(frozen=True)
+class DatabaseColumn:
     """
     This class represents a database column. Schema is currently ignored.
     """
     table: str
     column_name: str
 
+@dataclass(frozen=True)
 class FixedLengthDatabaseColumn(DatabaseColumn):
     """This class represents a fixed length database column."""
     fixed_length: PositiveInt
-
-    def __new__(cls, table, column_name, fixed_length):
-        return (super(FixedLengthDatabaseColumn, cls).
-                __new__(cls, table, column_name), fixed_length)
 
 class Database:
     """
