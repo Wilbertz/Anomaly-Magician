@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
 import pytest
+
+from configuration.config import Config
 from database.database import Database
 
 
@@ -25,9 +27,10 @@ def test_get_connection_string():
 def test_get_engine():
     database = Database()
     engine = database._get_engine()
-
     assert engine
 
-def test_get_statistics():
+def test_get_average_column_length():
     database = Database()
-    database.get_statistics()
+    average_column_length = database.get_average_column_length(Config().table, Config().column)
+    print(average_column_length)
+    assert average_column_length > 0

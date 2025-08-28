@@ -34,16 +34,11 @@ class Database:
         engine = create_engine(connection_string, echo=False)
         return engine
 
-    def get_statistics(self):
+
+    def get_average_column_length(self, table: str, column: str) -> float:
         with closing(self.engine.raw_connection()) as connection:
             cursor = connection.cursor()
-            cursor.execute("DBCC SHOW_STATISTICS ('samplecodestable', 'value')")
-            rows1 = cursor.fetchall()
-            #print(rows1)
-            cursor.nextset()
-            rows2 = cursor.fetchall()
-            #print(rows2)
-            #print(f"Average length: {rows2[0][1]}")
-            cursor.nextset()
-            rows3 = cursor.fetchall()
-            #print(rows3)
+            cursor.execute("DBCC SHOW_STATISTICS ('samplecodestable', 'value') WITH DENSITY_VECTOR")
+            statistics_row = cursor.fetchall()
+            return float(statistics_row[0][1]) # Average column length
+
