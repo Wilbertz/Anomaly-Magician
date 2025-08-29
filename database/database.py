@@ -51,7 +51,6 @@ class Database:
         engine = create_engine(connection_string, echo=False)
         return engine
 
-
     def get_all_columns(self) -> List[DatabaseColumn]:
         """Get all table name column name pairs in the database"""
         sql = """
@@ -108,3 +107,34 @@ class Database:
             fixed_length=self.is_fixed_length_column(column, tolerance))
             for column in self.get_all_text_columns()]
         return [column for column in text_columns if column.fixed_length]
+
+    def get_all_distinct_column_values_in_buffer_pool(self, column: DatabaseColumn) -> List[str]:
+        """Get all column values that reside within the buffer pool."""
+        sql = f"""
+        SELECT
+            DISTINCT t.{column.column_name} AS {column.column_name}
+        FROM dbo.samplecodestable t
+        CROSS APPLY sys.fn_PhysLocCracker(%%physloc%%) AS loc
+        WHERE EXISTS (
+            SELECT 1
+            FROM sys.dm_os_buffer_descriptors bd
+            JOIN sys.allocation_units au
+                ON bd.allocation_unit_id = au.allocation_unit_id
+            JOIN sys.partitions p
+                ON au.container_id = p.hobt_id
+            WHERE bd.database_id = DB_ID()
+              AND p.object_id = OBJECT_ID('{column.table}')
+              AND bd.file_id = loc.file_id
+              AND bd.page_id = loc.page_id
+        );
+        """
+        with sessionmaker(bind=self.engine)() as session:
+            return [row[0] for row in session.execute(text(sql)).fetchall()]
+
+    def clean_all_buffer(self) -> None:
+        """To test the buffer pool related commands, the buffer pool is cleaned."""
+        with sessionmaker(bind=self.engine)() as session:
+            session.execute(text('DBCC DROPCLEANBUFFERS'))
+
+    def read_complete_table(self, table: str) -> None:
+        pass
