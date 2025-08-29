@@ -75,7 +75,6 @@ def test_get_all_distinct_column_values_in_clean_buffer_pool():
     database.clean_buffer_pool()
     database_column = DatabaseColumn(Config().table, Config().column)
     values =database.get_all_distinct_column_values_in_buffer_pool(database_column)
-
     assert len(values) == 0
 
 def test_get_all_distinct_column_values_in_filled_buffer_pool():
@@ -83,6 +82,5 @@ def test_get_all_distinct_column_values_in_filled_buffer_pool():
     database.read_complete_table(Config().table)
     database_column = DatabaseColumn(Config().table, Config().column)
     values =database.get_all_distinct_column_values_in_buffer_pool(database_column)
-
     assert len(values) == 2
 
