@@ -70,3 +70,19 @@ def test_get_average_column_length():
     average_column_length = database.get_average_column_length(database_column)
     assert average_column_length > 0
 
+def test_get_all_distinct_column_values_in_clean_buffer_pool():
+    database = Database()
+    database.clean_buffer_pool()
+    database_column = DatabaseColumn(Config().table, Config().column)
+    values =database.get_all_distinct_column_values_in_buffer_pool(database_column)
+
+    assert len(values) == 0
+
+def test_get_all_distinct_column_values_in_filled_buffer_pool():
+    database = Database()
+    database.read_complete_table(Config().table)
+    database_column = DatabaseColumn(Config().table, Config().column)
+    values =database.get_all_distinct_column_values_in_buffer_pool(database_column)
+
+    assert len(values) == 2
+

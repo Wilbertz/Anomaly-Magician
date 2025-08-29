@@ -133,9 +133,9 @@ class Database:
             return [row[0] for row in session.execute(text(sql)).fetchall()]
 
     def get_all_distinct_column_values(self, column: DatabaseColumn, count: PositiveInt | None = None) -> List[str]:
-        pass
+        pass # ToDo
 
-    def clean_all_buffer(self) -> None:
+    def clean_buffer_pool(self) -> None:
         """To test the buffer pool related commands, the buffer pool is cleaned."""
         with sessionmaker(bind=self.engine)() as session:
             session.execute(text('DBCC DROPCLEANBUFFERS'))
@@ -143,4 +143,4 @@ class Database:
     def read_complete_table(self, table: str) -> None:
         """Read the complete table. All or a significant number of rows should now reside within the buffer pool."""
         with sessionmaker(bind=self.engine)() as session:
-            session.execute(text('SELECT * FROM {table}'))
+            session.execute(text(f'SELECT * FROM {table}'))
