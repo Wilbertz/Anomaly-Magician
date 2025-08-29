@@ -1,5 +1,6 @@
 from contextlib import closing
-from typing import NamedTuple, List
+from dataclasses import dataclass
+from typing import List
 
 import sqlalchemy
 from pydantic.v1 import PositiveInt
@@ -7,7 +8,7 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 
 from configuration.config import Config
-from dataclasses import dataclass
+
 
 @dataclass(frozen=True)
 class DatabaseColumn:
@@ -131,10 +132,15 @@ class Database:
         with sessionmaker(bind=self.engine)() as session:
             return [row[0] for row in session.execute(text(sql)).fetchall()]
 
+    def get_all_distinct_column_values(self, column: DatabaseColumn, count: PositiveInt | None = None) -> List[str]:
+        pass
+
     def clean_all_buffer(self) -> None:
         """To test the buffer pool related commands, the buffer pool is cleaned."""
         with sessionmaker(bind=self.engine)() as session:
             session.execute(text('DBCC DROPCLEANBUFFERS'))
 
     def read_complete_table(self, table: str) -> None:
-        pass
+        """Read the complete table. All or a significant number of rows should now reside within the buffer pool."""
+        with sessionmaker(bind=self.engine)() as session:
+            session.execute(text('SELECT * FROM {table}'))
