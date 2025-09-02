@@ -10,6 +10,11 @@ from sqlalchemy.orm import sessionmaker
 from codes.CodeModel import CodeModel
 from configuration.config import Config
 
+CONNECTION_STRING = (
+    "mssql+pyodbc://@DESKTOP-2LMIUA2/Anomaly-Magician"
+    "?driver=ODBC+Driver+17+for+SQL+Server"
+    "&trusted_connection=yes"
+)
 
 @dataclass(frozen=True)
 class DatabaseColumn:
@@ -168,7 +173,13 @@ class Database:
             return False
 
         # Second: use the columns within the buffer pool
+        column_values = self.get_all_distinct_column_values_in_buffer_pool(column)
+        if any(lambda x: not code.simple_check(x) for x in column_values):
+            return False
 
         # Third: use the full database table.
+        column_values = self.get_all_distinct_column_values(column)
+        if any(lambda x: not code.simple_check(x) for x in column_values):
+            return False
 
         return True

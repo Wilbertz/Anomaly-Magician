@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 import pytest
 
+from codes.VinCode import VinCode
 from configuration.config import Config
 from database.database import Database, DatabaseColumn, FixedLengthDatabaseColumn
 
@@ -89,4 +90,14 @@ def test_get_all_distinct_column_values():
         database_column = DatabaseColumn(Config().table, Config().column)
         values = database.get_all_distinct_column_values_in_buffer_pool(database_column)
         assert len(values) == 2
+
+def test_check_column_values_against_code():
+    database = Database()
+    database_column = DatabaseColumn(Config().table, Config().column)
+    code = VinCode()
+
+    result = database.check_column_values_against_code(database_column, code)
+
+    assert result == False
+
 
