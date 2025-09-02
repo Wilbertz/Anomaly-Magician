@@ -105,7 +105,6 @@ class Database:
                      WHERE s.object_id = OBJECT_ID('{column.table}')
                        AND c.name = '{column.column_name}'
                 """
-        print(sql)
         with sessionmaker(bind=self.engine)() as session:
             result = session.execute(text(sql))
             return result.first() is not None

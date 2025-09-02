@@ -13,8 +13,4 @@ def test_database_singleton():
 def test_can_get_vin_code():
     code_map = Length2CodeMap()
     codes = code_map.get_code(17)
-
     assert len(codes) == 1
-
-    code_type = type(codes[0])
-    print(code_type)

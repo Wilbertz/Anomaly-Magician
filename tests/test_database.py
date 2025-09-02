@@ -34,13 +34,11 @@ def test_get_engine():
 def test_get_all_columns():
     database = Database()
     all_columns = database.get_all_columns()
-    print (all_columns)
     assert len(all_columns) == 6
 
 def test_get_all_text_columns():
     database = Database()
     all_columns = database.get_all_text_columns()
-    print (all_columns)
     assert len(all_columns) == 4
 
 def test_column_has_statistics():
@@ -75,7 +73,6 @@ def test_get_all_fixed_length_columns():
 def test_get_all_fixed_length_columns_with_tolerance():
     database = Database()
     columns = database.get_all_fixed_length_columns(tolerance=1.0)
-    print (columns[0])
     assert len(columns) == 4
 
 def test_get_average_column_length():
@@ -98,10 +95,10 @@ def test_get_all_distinct_column_values_in_filled_buffer_pool():
     assert len(values) == 10000
 
 def test_get_all_distinct_column_values():
-        database = Database()
-        database_column = DatabaseColumn(Config().table, Config().column)
-        values = database.get_all_distinct_column_values(database_column)
-        assert len(values) == 10000
+    database = Database()
+    database_column = DatabaseColumn(Config().table, Config().column)
+    values = database.get_all_distinct_column_values(database_column)
+    assert len(values) == 10000
 
 def test_check_valid_column_values_against_code():
     database = Database()
