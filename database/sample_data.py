@@ -28,4 +28,5 @@ def create_sample_data(connection_string: str=CONNECTION_STRING, rows: PositiveI
 
 if __name__ == "__main__":
     #create_sample_database()
-   create_sample_data()
+    #create_sample_data()
+    pass

@@ -97,13 +97,25 @@ def test_get_all_distinct_column_values():
         values = database.get_all_distinct_column_values(database_column)
         assert len(values) == 10000
 
-def test_check_column_values_against_code():
+def test_check_valid_column_values_against_code():
     database = Database()
     database_column = DatabaseColumn(Config().table, Config().column)
     code = VinCode()
-
     result = database.check_column_values_against_code(database_column, code)
+    assert result == True
 
+def test_check_invalid_regex_column_values_against_code():
+    database = Database()
+    database_column = DatabaseColumn(Config().table, "vin_valid_length_invalid_regex")
+    code = VinCode()
+    result = database.check_column_values_against_code(database_column, code)
+    assert result == False
+
+def test_check_invalid_length_column_values_against_code():
+    database = Database()
+    database_column = DatabaseColumn(Config().table, "vin_invalid_length")
+    code = VinCode()
+    result = database.check_column_values_against_code(database_column, code)
     assert result == False
 
 

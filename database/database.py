@@ -195,12 +195,14 @@ class Database:
 
         # Second: use the columns within the buffer pool
         column_values = self.get_all_distinct_column_values_in_buffer_pool(column)
-        if any(lambda x: not code.simple_check(x) for x in column_values):
-            return False
+        for column_value in column_values:
+            if not code.simple_check(column_value):
+                return False
 
         # Third: use the full database table.
         column_values = self.get_all_distinct_column_values(column)
-        if any(lambda x: not code.simple_check(x) for x in column_values):
-            return False
+        for column_value in column_values:
+            if not code.simple_check(column_value):
+                return False
 
         return True
