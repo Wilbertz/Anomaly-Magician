@@ -84,3 +84,9 @@ def test_get_all_distinct_column_values_in_filled_buffer_pool():
     values =database.get_all_distinct_column_values_in_buffer_pool(database_column)
     assert len(values) == 2
 
+def test_get_all_distinct_column_values():
+        database = Database()
+        database_column = DatabaseColumn(Config().table, Config().column)
+        values = database.get_all_distinct_column_values_in_buffer_pool(database_column)
+        assert len(values) == 2
+
