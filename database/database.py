@@ -7,6 +7,7 @@ from pydantic.v1 import PositiveInt
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 
+from codes.CodeModel import CodeModel
 from configuration.config import Config
 
 
@@ -110,7 +111,7 @@ class Database:
         return [column for column in text_columns if column.fixed_length]
 
     def get_all_distinct_column_values_in_buffer_pool(self, column: DatabaseColumn) -> List[str]:
-        """Get all column values that reside within the buffer pool."""
+        """Get all distinct column values that reside within the buffer pool."""
         sql = f"""
         SELECT
             DISTINCT t.{column.column_name} AS {column.column_name}
@@ -133,6 +134,7 @@ class Database:
             return [row[0] for row in session.execute(text(sql)).fetchall()]
 
     def get_all_distinct_column_values(self, column: DatabaseColumn, count: PositiveInt | None = None) -> List[str]:
+        """Get all distinct column values."""
         sql = f"""
         SELECT DISTINCT {column.column_name} AS {column.column_name}
         FROM {column.table}
@@ -152,3 +154,21 @@ class Database:
         """Read the complete table. All or a significant number of rows should now reside within the buffer pool."""
         with sessionmaker(bind=self.engine)() as session:
             session.execute(text(f'SELECT * FROM {table}'))
+
+    def check_column_values_against_code(self, column: DatabaseColumn, code: CodeModel) -> bool:
+        """
+        Check a given database column against the given code
+        :param column: The database column to check
+        :param code: The code against the check is done.
+        :return:
+        """
+        # First: use statistics information
+        average_column_length = self.get_average_column_length(column)
+        if average_column_length < code.min_length or average_column_length > code.max_length:
+            return False
+
+        # Second: use the columns within the buffer pool
+
+        # Third: use the full database table.
+
+        return True
