@@ -133,7 +133,15 @@ class Database:
             return [row[0] for row in session.execute(text(sql)).fetchall()]
 
     def get_all_distinct_column_values(self, column: DatabaseColumn, count: PositiveInt | None = None) -> List[str]:
-        pass # ToDo
+        sql = f"""
+        SELECT DISTINCT {column.column_name} AS {column.column_name}
+        FROM {column.table}
+        """
+        result = []
+        with sessionmaker(bind=self.engine)() as session:
+            result = [row[0] for row in session.execute(text(sql)).fetchall()]
+
+        return result
 
     def clean_buffer_pool(self) -> None:
         """To test the buffer pool related commands, the buffer pool is cleaned."""
