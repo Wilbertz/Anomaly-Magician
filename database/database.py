@@ -120,7 +120,7 @@ class Database:
         sql = f"""
         SELECT
             DISTINCT t.{column.column_name} AS {column.column_name}
-        FROM dbo.samplecodestable t
+        FROM dbo.{column.table} t
         CROSS APPLY sys.fn_PhysLocCracker(%%physloc%%) AS loc
         WHERE EXISTS (
             SELECT 1

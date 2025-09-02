@@ -20,5 +20,5 @@ def test_config_configuration():
     assert Config().server
     assert Config().server == "DESKTOP-2LMIUA2"
     assert Config().database == "Anomaly-Magician"
-    assert Config().table == "samplecodestable"
-    assert Config().column == "value"
+    assert Config().table == "vintable"
+    assert Config().column == "vin_valid"

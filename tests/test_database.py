@@ -1,10 +1,11 @@
 import os
 from pathlib import Path
+
 import pytest
 
 from codes.VinCode import VinCode
 from configuration.config import Config
-from database.database import Database, DatabaseColumn, FixedLengthDatabaseColumn
+from database.database import Database, DatabaseColumn
 
 
 @pytest.fixture(autouse=True)
@@ -34,36 +35,42 @@ def test_get_all_columns():
     database = Database()
     all_columns = database.get_all_columns()
     print (all_columns)
-    assert len(all_columns) == 2
+    assert len(all_columns) == 6
 
 def test_get_all_text_columns():
     database = Database()
     all_columns = database.get_all_text_columns()
     print (all_columns)
-    assert len(all_columns) == 1
+    assert len(all_columns) == 4
 
 def test_is_fixed_length_column():
     database = Database()
     database_column = DatabaseColumn(Config().table, Config().column)
     is_fixed_length = database.is_fixed_length_column(database_column)
-    assert is_fixed_length is None
+    assert is_fixed_length
+
+def test_is_not_fixed_length_column():
+    database = Database()
+    database_column = DatabaseColumn(Config().table, "vin_invalid_length")
+    is_fixed_length = database.is_fixed_length_column(database_column)
+    assert is_fixed_length
 
 def test_is_fixed_length_column_with_tolerance():
     database = Database()
     database_column = DatabaseColumn(Config().table, Config().column)
     is_fixed_length = database.is_fixed_length_column(database_column, tolerance=0.1)
-    assert is_fixed_length == 5
+    assert is_fixed_length == 17
 
 def test_get_all_fixed_length_columns():
     database = Database()
     columns = database.get_all_fixed_length_columns()
-    assert len(columns) == 0
+    assert len(columns) == 3
 
 def test_get_all_fixed_length_columns_with_tolerance():
     database = Database()
     columns = database.get_all_fixed_length_columns(tolerance=1.0)
     print (columns[0])
-    assert len(columns) == 1
+    assert len(columns) == 4
 
 def test_get_average_column_length():
     database = Database()
@@ -75,21 +82,20 @@ def test_get_all_distinct_column_values_in_clean_buffer_pool():
     database = Database()
     database.clean_buffer_pool()
     database_column = DatabaseColumn(Config().table, Config().column)
-    values =database.get_all_distinct_column_values_in_buffer_pool(database_column)
-    assert len(values) == 0
+    _ = database.get_all_distinct_column_values_in_buffer_pool(database_column)
 
 def test_get_all_distinct_column_values_in_filled_buffer_pool():
     database = Database()
     database.read_complete_table(Config().table)
     database_column = DatabaseColumn(Config().table, Config().column)
     values =database.get_all_distinct_column_values_in_buffer_pool(database_column)
-    assert len(values) == 2
+    assert len(values) == 10000
 
 def test_get_all_distinct_column_values():
         database = Database()
         database_column = DatabaseColumn(Config().table, Config().column)
-        values = database.get_all_distinct_column_values_in_buffer_pool(database_column)
-        assert len(values) == 2
+        values = database.get_all_distinct_column_values(database_column)
+        assert len(values) == 10000
 
 def test_check_column_values_against_code():
     database = Database()

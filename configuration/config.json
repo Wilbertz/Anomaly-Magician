@@ -2,7 +2,7 @@
   "database": {
     "server": "DESKTOP-2LMIUA2",
     "database": "Anomaly-Magician",
-    "table": "samplecodestable",
-    "column": "value"
+    "table": "vintable",
+    "column": "vin_valid"
   }
 }
