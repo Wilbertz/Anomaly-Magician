@@ -43,6 +43,12 @@ def test_get_all_text_columns():
     print (all_columns)
     assert len(all_columns) == 4
 
+def test_column_has_statistics():
+    database = Database()
+    database_column = DatabaseColumn(Config().table, Config().column)
+    has_statistics = database.column_has_statistics(database_column)
+    assert has_statistics
+
 def test_is_fixed_length_column():
     database = Database()
     database_column = DatabaseColumn(Config().table, Config().column)

@@ -90,25 +90,25 @@ class Database:
         with sessionmaker(bind=self.engine)() as session:
             return [DatabaseColumn(row[1], row[2]) for row in session.execute(text(sql)).fetchall()]
 
-    def column_has_statistics(self, engine, column: DatabaseColumn) -> bool:
+    def column_has_statistics(self, column: DatabaseColumn) -> bool:
         """
         Check if a column in an SQL Server table has statistics defined.
         Returns:
             True if statistics exist for that column, False otherwise
         """
-        query = text("""
+        sql = f"""
                      SELECT 1
                      FROM sys.stats s
                               JOIN sys.stats_columns sc
                                    ON s.object_id = sc.object_id AND s.stats_id = sc.stats_id
                               JOIN sys.columns c
                                    ON sc.object_id = c.object_id AND sc.column_id = c.column_id
-                     WHERE s.object_id = OBJECT_ID(:table_name)
-                       AND c.name = :column_name
-                     """)
-
+                     WHERE s.object_id = OBJECT_ID('{column.table}')
+                       AND c.name = '{column.column_name}'
+                """
+        print(sql)
         with sessionmaker(bind=self.engine)() as session:
-            result = session.execute(query, {f"table_name": {column.table}, "column_name": {column.column_name}})
+            result = session.execute(text(sql))
             return result.first() is not None
 
     def get_average_column_length(self, column: DatabaseColumn) -> float:
