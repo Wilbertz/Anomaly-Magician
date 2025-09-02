@@ -30,6 +30,7 @@ class CodeModel(BaseModel, ABC):
                                      description="A regular expression used to validate the code.")
     values: list[str] | None = Field(default=None, title="Value list",
                                      description="A complete list of possible values.")
+
     @abstractmethod
     def simple_check(self, code: str)  -> bool:
         """

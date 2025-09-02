@@ -42,7 +42,6 @@ class Database:
 
     def __init__(self):
         self.engine = self._get_engine()
-        pass
 
     @staticmethod
     def _get_connection_string() -> str:
