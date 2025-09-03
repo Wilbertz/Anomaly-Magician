@@ -85,7 +85,7 @@ def test_get_average_column_length_without_statistics():
     database = Database()
     database_column = DatabaseColumn(Config().table, Config().column)
     average_column_length = database.get_average_column_length(database_column)
-    assert average_column_length > 0
+    assert average_column_length == 17.0
 
 def test_get_all_distinct_column_values_in_clean_buffer_pool():
     database = Database()
