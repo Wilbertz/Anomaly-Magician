@@ -110,12 +110,24 @@ class Database:
             return result.first() is not None
 
     def get_average_column_length(self, column: DatabaseColumn) -> float:
-        """Get average column length for a given table and column using DBCC SHOW_STATISTICS."""
-        with closing(self.engine.raw_connection()) as connection:
-            cursor = connection.cursor()
-            cursor.execute(f"DBCC SHOW_STATISTICS ({column.table}, {column.column_name}) WITH DENSITY_VECTOR")
-            statistics_row = cursor.fetchall()
-            return float(statistics_row[0][1]) # Average column length
+        """
+        Get average column length for a given table and column using DBCC SHOW_STATISTICS
+        in case statistics are defined. Otherwise, use plain SQL.
+        """
+        if self.column_has_statistics(column):
+            with closing(self.engine.raw_connection()) as connection:
+                cursor = connection.cursor()
+                cursor.execute(f"DBCC SHOW_STATISTICS ({column.table}, {column.column_name}) WITH DENSITY_VECTOR")
+                statistics_row = cursor.fetchall()
+                return float(statistics_row[0][1]) # Average column length
+        else:
+            return self.get_average_column_length(column)
+
+    def get_average_column_length_without_statistics(self, column: DatabaseColumn) -> float:
+        """Get the average column length for a given table and column using plain SQL"""
+        sql = f"""SELECT AVG(LEN({column.column_name})) AS avg_length FROM {column.table}"""
+        with sessionmaker(bind=self.engine)() as session:
+            return float(session.execute(text(sql)).first()[0])
 
     def is_fixed_length_column(self, column: DatabaseColumn, tolerance: float = 0) -> int | None:
         """Check if a column has a fixed length. In case the column has a fixed length, its length is returned."""
