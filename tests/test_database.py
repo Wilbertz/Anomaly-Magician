@@ -34,7 +34,7 @@ def test_get_engine():
 def test_get_all_columns():
     database = Database()
     all_columns = database.get_all_columns()
-    assert len(all_columns) == 6
+    assert len(all_columns) == 11
 
 def test_get_all_text_columns():
     database = Database()
