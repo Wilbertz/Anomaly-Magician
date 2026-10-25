@@ -4,8 +4,8 @@ import inspect
 import exrex
 import random
 from abc import ABC, abstractmethod
-from typing import List
-from pydantic import BaseModel, Field
+from typing import List, Self
+from pydantic import BaseModel, Field, model_validator
 from pydantic.v1 import PositiveInt
 
 
@@ -31,6 +31,36 @@ class CodeModel(BaseModel, ABC):
     values: list[str] | None = Field(default=None, title="Value list",
                                      description="A complete list of possible values.")
 
+    @model_validator(mode="after")
+    def validate_lengths(self) -> Self:
+
+        if self.fixed_length is not None:
+
+            if self.min_length is not None:
+                if self.min_length != self.fixed_length:
+                    raise ValueError(
+                        "min_length must equal fixed_length"
+                    )
+
+            if self.max_length is not None:
+                if self.max_length != self.fixed_length:
+                    raise ValueError(
+                        "max_length must equal fixed_length"
+                    )
+
+            self.min_length = self.fixed_length
+            self.max_length = self.fixed_length
+
+        elif (
+                self.min_length is not None
+                and self.max_length is not None
+                and self.min_length > self.max_length
+        ):
+            raise ValueError(
+                "min_length cannot exceed max_length"
+            )
+
+        return self
     @abstractmethod
     def simple_check(self, code: str)  -> bool:
         """
