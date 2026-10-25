@@ -21,11 +21,11 @@ class CodeModel(BaseModel, ABC):
     iso_code: str | None = Field(default=None, title="ISO Code",
                            description="The name of the ISO standard in case an ISO code is used.")
     fixed_length: int | None = Field(default=None, title="Fixed Length",
-                                     description="The fixed number of characters all code instances must have.")
+                                     description="The fixed number of characters all code instances must have.", ge=0)
     min_length: int = Field(default_factory=lambda data: data['fixed_length'], title="Minimum Length",
-                            description="The minimum number of characters a code must have.")
+                            description="The minimum number of characters a code must have.", ge=0)
     max_length: int = Field(default_factory=lambda data: data['fixed_length'], title="Maximum Length",
-                            description="The maximum number of characters a code can have.")
+                            description="The maximum number of characters a code can have.", ge=0)
     regex: re.Pattern | None = Field(default=None, title="Regular Expression",
                                      description="A regular expression used to validate the code.")
     values: list[str] | None = Field(default=None, title="Value list",
