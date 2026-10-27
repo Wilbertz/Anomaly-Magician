@@ -130,3 +130,21 @@ class TestCodeModel:
                 min_length=min_length,
                 max_length=max_length,
             )
+
+    @pytest.mark.parametrize(
+        "field,value",
+        [
+            ("min_length", "invalid"),
+            ("max_length", "invalid"),
+            ("industries", "Automotive"),
+            ("values", "ABC"),
+            ("iso_code", 123),
+        ],
+    )
+    def test_invalid_field_types(self, field, value):
+        """Test validation of incorrect field types."""
+        with pytest.raises(ValidationError):
+            TestableCodeModel(
+                name="Test",
+                **{field: value},
+            )
