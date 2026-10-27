@@ -1,5 +1,6 @@
-from pydantic.v1 import PositiveInt
+import re
 
+from pydantic.v1 import PositiveInt
 from codes.CodeModel import CodeModel
 
 
@@ -37,3 +38,27 @@ class TestCodeModel:
         assert model.max_length is None
         assert model.regex is None
         assert model.values is None
+
+    def test_create_model_with_all_fields(self):
+        """Test creating a model with all fields."""
+        pattern = re.compile(r"^[A-Z0-9]{17}$")
+
+        model = TestableCodeModel(
+            name="VIN",
+            industries=["Automotive"],
+            iso_code="ISO 3779",
+            fixed_length=17,
+            min_length=17,
+            max_length=17,
+            regex=pattern,
+            values=["ABC12345678901234"],
+        )
+
+        assert model.name == "VIN"
+        assert model.industries == ["Automotive"]
+        assert model.iso_code == "ISO 3779"
+        assert model.fixed_length == 17
+        assert model.min_length == 17
+        assert model.max_length == 17
+        assert model.regex == pattern
+        assert model.values == ["ABC12345678901234"]
