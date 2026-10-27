@@ -1,5 +1,7 @@
 import re
+import pytest
 
+from pydantic import ValidationError
 from pydantic.v1 import PositiveInt
 from codes.CodeModel import CodeModel
 
@@ -62,3 +64,69 @@ class TestCodeModel:
         assert model.max_length == 17
         assert model.regex == pattern
         assert model.values == ["ABC12345678901234"]
+
+    @pytest.mark.parametrize(
+        "fixed_length",
+        [1, 10, 17, 34, 100],
+    )
+    def test_min_max_length_default_to_fixed_length(self, fixed_length):
+        """Test that min/max length inherit fixed_length."""
+        model = TestableCodeModel(
+            name="Test",
+            fixed_length=fixed_length,
+        )
+
+        assert model.min_length == fixed_length
+        assert model.max_length == fixed_length
+
+    def test_min_max_length_without_fixed_length(self):
+        """Test that min/max length default to None."""
+        model = TestableCodeModel(name="Test")
+
+        assert model.fixed_length is None
+        assert model.min_length is None
+        assert model.max_length is None
+
+    def test_explicit_min_max_length(self):
+        """Test explicitly specified minimum and maximum lengths."""
+        model = TestableCodeModel(
+            name="Test",
+            min_length=5,
+            max_length=20,
+        )
+
+        assert model.min_length == 5
+        assert model.max_length == 20
+
+    def test_explicit_lengths_match_fixed_length(self):
+        """Test that explicit lengths matching fixed_length are accepted."""
+
+        model = TestableCodeModel(
+            name="Test",
+            fixed_length=17,
+            min_length=17,
+            max_length=17,
+        )
+
+        assert model.fixed_length == 17
+        assert model.min_length == 17
+        assert model.max_length == 17
+
+    @pytest.mark.parametrize(
+        "min_length,max_length",
+        [
+            (10, 17),
+            (17, 20),
+            (10, 20),
+        ],
+    )
+    def test_conflicting_lengths(self, min_length, max_length):
+        """Test that lengths conflicting with fixed_length are rejected."""
+
+        with pytest.raises(ValidationError):
+            TestableCodeModel(
+                name="Test",
+                fixed_length=17,
+                min_length=min_length,
+                max_length=max_length,
+            )

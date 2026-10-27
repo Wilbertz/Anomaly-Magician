@@ -61,6 +61,7 @@ class CodeModel(BaseModel, ABC):
             )
 
         return self
+
     @abstractmethod
     def simple_check(self, code: str)  -> bool:
         """
