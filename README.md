@@ -24,6 +24,7 @@ This project was written in Python 3.12
   - tests
 
 ## Project Motivation <a name="motivation"></a>
+The goal of the project is to improve data quality in relational databases using AI agents.
 ## Features <a name="features"></a>
 ## Results <a name="results"></a>
 ## Blog <a name="blog"></a>
