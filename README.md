@@ -12,7 +12,7 @@ This repository contains code for a wizard that analyzes a given database and ge
 6. [Blog](#blog)
 
 ## Installation <a name="installation"></a>
-This project was written in Python 3.12
+This project is written in Python 3.12
 ## Directory Structure <a name="directoryStructure"></a>
 - Anomaly-Magician
   - codes
